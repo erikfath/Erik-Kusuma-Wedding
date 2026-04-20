@@ -354,7 +354,7 @@
           <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
               Disqus.</a></noscript> -->
 
-          <div id="disqus_thread"></div>
+          <!-- <div id="disqus_thread"></div>
           <script>
             /**
              *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -375,7 +375,26 @@
             })();
           </script>
           <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
-              Disqus.</a></noscript>
+              Disqus.</a></noscript> -->
+
+          <div class="mt-5">
+            <h3 class="text-center mb-4">Ucapan & Doa</h3>
+
+            <div class="mb-3">
+              <input type="text" id="ucapan_nama" class="form-control" placeholder="Nama kamu...">
+            </div>
+
+            <div class="mb-3">
+              <textarea id="ucapan_pesan" class="form-control" rows="4" placeholder="Tulis ucapan & doa..."></textarea>
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-primary" onclick="kirimUcapan()">Kirim Ucapan</button>
+            </div>
+
+            <div id="list-ucapan" class="mt-4"></div>
+          </div>
+
         </div>
       </div>
 
@@ -567,6 +586,59 @@
 
     document.querySelector('#nama').value = nama;
   </script>
+
+  <script>
+    const UCAPAN_API = "URL_WEB_APP_LO"; // GANTI INI
+
+    function kirimUcapan() {
+      const nama = document.getElementById("ucapan_nama").value;
+      const pesan = document.getElementById("ucapan_pesan").value;
+
+      if (!nama || !pesan) {
+        alert("Isi dulu ya 🙂");
+        return;
+      }
+
+      fetch(UCAPAN_API, {
+          method: "POST",
+          body: JSON.stringify({
+            nama,
+            pesan
+          })
+        })
+        .then(() => {
+          alert("Ucapan berhasil dikirim ❤️");
+          document.getElementById("ucapan_nama").value = "";
+          document.getElementById("ucapan_pesan").value = "";
+          loadUcapan();
+        });
+    }
+
+    function loadUcapan() {
+      fetch(UCAPAN_API)
+        .then(res => res.json())
+        .then(data => {
+          let html = "";
+
+          data.reverse().forEach(item => {
+            html += `
+          <div class="card mb-2">
+            <div class="card-body">
+              <strong>${item.nama}</strong>
+              <p class="mb-0">${item.pesan}</p>
+            </div>
+          </div>
+        `;
+          });
+
+          document.getElementById("list-ucapan").innerHTML = html;
+        });
+    }
+
+    loadUcapan();
+    document.getElementById("ucapan_nama").value = nama;
+  </script>
+
 </body>
 
 </html>

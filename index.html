@@ -588,55 +588,42 @@
   </script>
 
   <script>
-    const UCAPAN_API =
-      "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"; // GANTI INI
+    function doPost(e) {
+      const sheet = SpreadsheetApp
+        .openById("1aooDOh78xiEN38-LD_UGmgjsmwUDrzxGOGiUgi4gMuo")
+        .getActiveSheet();
 
-    function kirimUcapan() {
-      const nama = document.getElementById("ucapan_nama").value;
-      const pesan = document.getElementById("ucapan_pesan").value;
+      const data = JSON.parse(e.postData.contents);
 
-      if (!nama || !pesan) {
-        alert("Isi dulu ya 🙂");
-        return;
+      sheet.appendRow([
+        data.nama,
+        data.pesan,
+        new Date()
+      ]);
+
+      return ContentService.createTextOutput("success");
+    }
+
+    function doGet() {
+      const sheet = SpreadsheetApp
+        .openById("ISI_ID_SPREADSHEET_LO")
+        .getActiveSheet();
+
+      const rows = sheet.getDataRange().getValues();
+
+      let data = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        data.push({
+          nama: rows[i][0],
+          pesan: rows[i][1]
+        });
       }
 
-      fetch(UCAPAN_API, {
-          method: "POST",
-          body: JSON.stringify({
-            nama,
-            pesan
-          })
-        })
-        .then(() => {
-          alert("Ucapan berhasil dikirim ❤️");
-          document.getElementById("ucapan_nama").value = "";
-          document.getElementById("ucapan_pesan").value = "";
-          loadUcapan();
-        });
+      return ContentService
+        .createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
     }
-
-    function loadUcapan() {
-      fetch(UCAPAN_API)
-        .then(res => res.json())
-        .then(data => {
-          let html = "";
-
-          data.reverse().forEach(item => {
-            html += `
-          <div class="card mb-2">
-            <div class="card-body">
-              <strong>${item.nama}</strong>
-              <p class="mb-0">${item.pesan}</p>
-            </div>
-          </div>
-        `;
-          });
-
-          document.getElementById("list-ucapan").innerHTML = html;
-        });
-    }
-
-    loadUcapan();
     document.getElementById("ucapan_nama").value = nama;
   </script>
 

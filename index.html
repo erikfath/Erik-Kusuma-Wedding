@@ -591,8 +591,8 @@
     function doPost(e) {
       const sheet = SpreadsheetApp
         .openById(
-          "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
-          )
+          "1aooDOh78xiEN38-LD_UGmgjsmwUDrzxGOGiUgi4gMuo"
+        )
         .getActiveSheet();
 
       const data = JSON.parse(e.postData.contents);
@@ -609,8 +609,8 @@
     function doGet() {
       const sheet = SpreadsheetApp
         .openById(
-          "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
-          )
+          "1aooDOh78xiEN38-LD_UGmgjsmwUDrzxGOGiUgi4gMuo"
+        )
         .getActiveSheet();
 
       const rows = sheet.getDataRange().getValues();

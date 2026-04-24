@@ -600,15 +600,22 @@
     document.querySelector('#nama').value = nama;
   </script>
 
+
   <script>
     function doPost(e) {
       const sheet = SpreadsheetApp
         .openById(
           "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
-          )
+        )
         .getActiveSheet();
 
-      const data = JSON.parse(e.postData.contents);
+      let data;
+
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (err) {
+        return ContentService.createTextOutput("invalid json");
+      }
 
       sheet.appendRow([
         data.nama,
@@ -617,29 +624,6 @@
       ]);
 
       return ContentService.createTextOutput("success");
-    }
-
-    function doGet() {
-      const sheet = SpreadsheetApp
-        .openById(
-          "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
-          )
-        .getActiveSheet();
-
-      const rows = sheet.getDataRange().getValues();
-
-      let data = [];
-
-      for (let i = 1; i < rows.length; i++) {
-        data.push({
-          nama: rows[i][0],
-          pesan: rows[i][1]
-        });
-      }
-
-      return ContentService
-        .createTextOutput(JSON.stringify(data))
-        .setMimeType(ContentService.MimeType.JSON);
     }
   </script>
 

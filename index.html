@@ -334,7 +334,7 @@
 
 
           <!-- tes pakai comment box -->
-          <div class="mt-5">
+          <!-- <div class="mt-5">
             <h3 class="text-center mb-4">Ucapan & Doa</h3>
 
             <div class="commentbox"></div>
@@ -343,7 +343,7 @@
           <script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
           <script>
             commentBox('5672305061527552-proj');
-          </script>
+          </script> -->
 
           <!-- <div id="disqus_thread"></div>
           <script>
@@ -390,7 +390,7 @@
           <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
               Disqus.</a></noscript> -->
 
-          <!-- <div class="mt-5">
+          <div class="mt-5">
             <h3 class="text-center mb-4">Ucapan & Doa</h3>
 
             <div class="mb-3">
@@ -406,7 +406,7 @@
             </div>
 
             <div id="list-ucapan" class="mt-4"></div>
-          </div> -->
+          </div>
 
         </div>
       </div>
@@ -600,7 +600,48 @@
     document.querySelector('#nama').value = nama;
   </script>
 
+  <script>
+    function doPost(e) {
+      const sheet = SpreadsheetApp
+        .openById(
+          "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
+          )
+        .getActiveSheet();
 
+      const data = JSON.parse(e.postData.contents);
+
+      sheet.appendRow([
+        data.nama,
+        data.pesan,
+        new Date()
+      ]);
+
+      return ContentService.createTextOutput("success");
+    }
+
+    function doGet() {
+      const sheet = SpreadsheetApp
+        .openById(
+          "https://script.google.com/macros/s/AKfycbzSTZbLKUzCJmnr6eMy74OWR0DVuDVXSqS9GpyG-QGLLGb44IsGc03L6GkrOd_jKyc8/exec"
+          )
+        .getActiveSheet();
+
+      const rows = sheet.getDataRange().getValues();
+
+      let data = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        data.push({
+          nama: rows[i][0],
+          pesan: rows[i][1]
+        });
+      }
+
+      return ContentService
+        .createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  </script>
 
 </body>
 

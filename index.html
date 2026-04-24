@@ -332,6 +332,19 @@
       <div class="row justify-content-center mt-5">
         <div class="col-md-6">
 
+
+          <!-- tes pakai comment box -->
+          <div class="mt-5">
+            <h3 class="text-center mb-4">Ucapan & Doa</h3>
+
+            <div class="commentbox"></div>
+          </div>
+
+          <script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
+          <script>
+            commentBox('5672305061527552-proj');
+          </script>
+
           <!-- <div id="disqus_thread"></div>
           <script>
             /**
@@ -587,45 +600,7 @@
     document.querySelector('#nama').value = nama;
   </script>
 
-  <script>
-    function doPost(e) {
-      const sheet = SpreadsheetApp
-        .openById("1aooDOh78xiEN38-LD_UGmgjsmwUDrzxGOGiUgi4gMuo")
-        .getActiveSheet();
 
-      const data = JSON.parse(e.postData.contents);
-
-      sheet.appendRow([
-        data.nama,
-        data.pesan,
-        new Date()
-      ]);
-
-      return ContentService.createTextOutput("success");
-    }
-
-    function doGet() {
-      const sheet = SpreadsheetApp
-        .openById("ISI_ID_SPREADSHEET_LO")
-        .getActiveSheet();
-
-      const rows = sheet.getDataRange().getValues();
-
-      let data = [];
-
-      for (let i = 1; i < rows.length; i++) {
-        data.push({
-          nama: rows[i][0],
-          pesan: rows[i][1]
-        });
-      }
-
-      return ContentService
-        .createTextOutput(JSON.stringify(data))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-    document.getElementById("ucapan_nama").value = nama;
-  </script>
 
 </body>
 
